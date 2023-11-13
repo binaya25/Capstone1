@@ -49,6 +49,9 @@ No additional files or resources are required to run the app.
 The Stock Analyst App relies on public stock market data sources for historical stock data.
 The predictions provided by the app are based on a machine learning model and should be used for informational purposes only.
 
+## SwingStock
+
+
 ## Contact Information
 For any questions, issues, or feedback related to the Stock Analyst App, please contact [```https://www.linkedin.com/in/binaya-thulung10/```].
 
