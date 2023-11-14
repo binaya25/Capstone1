@@ -1,10 +1,8 @@
 import numpy as np
 import pandas as pd
-
 import datetime
 import json
 import yfinance as yf
-import yahoo_fin.stock_info as si
 import streamlit as st
 import plotly.express as px
 import mplfinance as mpf
