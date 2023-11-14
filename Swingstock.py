@@ -50,17 +50,11 @@ with pricing_data:
     st.write('Standard Deviation = ', stdev * 100, '%')
     st.write('Risk Adj. Return = ', annual_return / (stdev * 100))
 
-    # Retrieving from yahooquery
-    stock = Ticker(ticker)
-    stock_info = stock.summary_detail
-
-    for key, value in stock_info.items():
-        print(f"{key}: {value}")
-
 
 
     if ticker:
         sdata = Ticker(ticker)
+        stock_info = sdata.summary_detail
 
         # Retrieving specific information
         market_cap = sdata.summary_detail[ticker]["marketCap"]/1e10
@@ -81,6 +75,9 @@ with pricing_data:
         st.write(f"Total Shares: {total_shares:.7f}B")
         st.write(f"Dividend Yield: {dividend_yield:.2f}%")
         st.write(f"Volume: {volume:}M")
+
+        for key, value in stock_info.items():
+            print(f"{key}: {value}")
 
 
 
@@ -269,8 +266,6 @@ with indication:
             st.write("Indication: Buy")
         else:
             st.write("Indication: Wait")
-
-
 
 
 
