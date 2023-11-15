@@ -11,9 +11,6 @@ from datetime import datetime
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 
-
-
-
 st.title('Swingstock')
 ticker = st.sidebar.text_input('Stock')
 start_date = st.sidebar.date_input('Start Date')
