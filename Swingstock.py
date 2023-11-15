@@ -11,6 +11,7 @@ from yahooquery import Ticker
 from datetime import datetime
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+nltk.download('vader_lexicon')
 
 st.title('Swingstock')
 ticker = st.sidebar.text_input('Stock')
