@@ -4,6 +4,7 @@ import datetime
 import yfinance as yf
 import streamlit as st
 import plotly.express as px
+import nltk
 from datetime import date
 import plotly.graph_objects as go
 from yahooquery import Ticker
