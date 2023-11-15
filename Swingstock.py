@@ -1,22 +1,16 @@
 import numpy as np
 import pandas as pd
 import datetime
-import json
 import yfinance as yf
 import streamlit as st
 import plotly.express as px
-import mplfinance as mpf
-import mplcursors
-import requests as re
 from datetime import date
 import plotly.graph_objects as go
 from yahooquery import Ticker
 from datetime import datetime
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-from bs4 import BeautifulSoup
 
-from pandas_datareader import data as pdr
-from keras.models import load_model
 
 
 
@@ -189,17 +183,49 @@ with technical_data:
 
 
 with news:
-    st.subheader('News')
-    news_data = yf.Ticker(ticker).news
+    def perform_sentiment_analysis(articles): # sentiment analysis using VADER
+        sid = SentimentIntensityAnalyzer()
+        sentiment_scores = []
+        for article in articles:
+            sentiment_scores.append(sid.polarity_scores(article))
+        return sentiment_scores
 
-    for news_item in news_data:
+
+    # Calculate overall sentiment score
+    def calculate_sentiment_score(sentiment_scores):
+        compound_scores = [score['compound'] for score in sentiment_scores]
+        overall_score = sum(compound_scores) / len(compound_scores)
+        return overall_score
+
+
+    # buy/sell indication based on sentiment score
+    def provide_buy_sell_indication(score):
+        if score >= 0.1:
+            return "Buy"
+        elif score <= -0.1:
+            return "Sell"
+        else:
+            return "Hold"
+
+    # Fetching news
+    news_data = yf.Ticker(ticker).news
+    news_articles = [news_item["title"] for news_item in news_data]
+
+    # Sentiment analysis
+    sentiment_scores = perform_sentiment_analysis(news_articles)
+    overall_score = calculate_sentiment_score(sentiment_scores)
+    buy_sell_indication = provide_buy_sell_indication(overall_score)
+
+    st.subheader('News')
+
+    for i, news_item in enumerate(news_data):
         title = news_item["title"]
         publisher = news_item["publisher"]
         link = news_item["link"]
         publish_time = news_item["providerPublishTime"]
         image_url = news_item.get("image", None)
 
-        st.title(title)
+        st.title(f"News {i + 1}: {title}")
         publish_datetime = datetime.fromtimestamp(publish_time)
         publish_time = publish_datetime.strftime("%d %B %Y & %I:%M %p")
 
@@ -210,15 +236,16 @@ with news:
         st.write("Publish Date & Time:", publish_time)
         st.write("Link:", link)
 
+    st.subheader('Sentiment Analysis')
+    st.write("Overall Sentiment Score: ", overall_score)
+    st.write("Buy/Sell Indication: ", buy_sell_indication)
 
 
 with indication:
     st.subheader('Indication')
-
-    # user-selected timeframe
     timeframe = st.selectbox("Select Timeframe:", ("Hourly", "Daily", "Weekly", "Monthly"))
 
-    # selected timeframe
+    # Selected timeframe
     if timeframe == "Hourly":
         timeframe_data = data.resample('H').last()
     elif timeframe == "Daily":
@@ -228,13 +255,13 @@ with indication:
     elif timeframe == "Monthly":
         timeframe_data = data.resample('M').last()
 
-    # latest closing price
+    # Latest closing price
     latest_close = timeframe_data['Close'].iloc[-1]
 
     user_situation = st.radio("User's Situation:", ("Already Bought", "Planning to Buy"))
     if user_situation == "Already Bought":
 
-        # moving average20
+        # Moving average20
         moving_average = timeframe_data['Close'].rolling(window=20).mean().iloc[-1]
 
         # RSI
@@ -253,7 +280,7 @@ with indication:
             st.write("Indication: Hold")
     else:
 
-        # moving average50
+        # Moving average50
         moving_average = timeframe_data['Close'].rolling(window=50).mean().iloc[-1]
 
         # Calculating P/E ratio
@@ -266,6 +293,10 @@ with indication:
             st.write("Indication: Buy")
         else:
             st.write("Indication: Wait")
+
+    st.subheader('Sentiment Analysis')
+    st.write("Overall Sentiment Score: ", overall_score)
+    st.write("Buy/Sell Indication: ", buy_sell_indication)
 
 
 
