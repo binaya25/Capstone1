@@ -35,7 +35,6 @@ cmdstanpy==1.0.4
 comm==0.1.4
 contourpy==1.1.1
 convertdate==2.4.0
-
 cssselect==1.2.0
 cycler==0.12.1
 Cython==3.0.4
