@@ -4,6 +4,7 @@ import datetime
 import yfinance as yf
 import streamlit as st
 import plotly.express as px
+from keras.models import load_model
 import nltk
 from datetime import date
 import plotly.graph_objects as go
@@ -17,6 +18,15 @@ st.title('Swingstock')
 ticker = st.sidebar.text_input('Stock')
 start_date = st.sidebar.date_input('Start Date')
 end_date = st.sidebar.date_input('End Date')
+
+# ticker = input("Please enter the stock's ticker symbol: ")
+# start_date = input("Please enter the start date (YYYY-MM-DD): ")
+# end_date = input("Please enter the end date (YYYY-MM-DD): ")
+#
+# if not ticker or not start_date or not end_date:
+#     print("Please input the stock's name and date.")
+# else:
+#     data = yf.download(ticker, start=start_date, end=end_date)
 
 
 
@@ -274,34 +284,134 @@ with indication:
 
         #  Sell/hold indication
         if latest_close < moving_average and rsi > 70:
-            st.write("Indication: Sell")
+            st.write("Overall: Sell")
         else:
-            st.write("Indication: Hold")
+            st.write("Overall: Hold")
     else:
 
         # Moving average50
         moving_average = timeframe_data['Close'].rolling(window=50).mean().iloc[-1]
 
         # Calculating P/E ratio
-        earnings_per_share = 4.5  # Example value, replace with actual earnings per share
+        earnings_per_share = 4.5
         price_per_share = latest_close
         pe_ratio = price_per_share / earnings_per_share
 
         #  Buy/wait indication
         if latest_close > moving_average and pe_ratio < 15:
-            st.write("Indication: Buy")
+            st.write("Overall: Buy")
         else:
-            st.write("Indication: Wait")
+            st.write("Overall: Wait")
+
+    ma10 = data.Close.rolling(10).mean()
+    ma20 = data.Close.rolling(20).mean()
+    ma200 = data.Close.rolling(200).mean()
+
+    Train_df = pd.DataFrame(data['Close'][0:int(len(data) * 0.70)])
+    Test_df = pd.DataFrame(data['Close'][int(len(data) * 0.70):int(len(data))])
+
+    from sklearn.preprocessing import MinMaxScaler
+
+    scaler = MinMaxScaler(feature_range=(0, 1))
+
+    Train_df_array = scaler.fit_transform(Train_df)
+
+    # Load model
+    model = load_model('model_keras_stockapp1.h5')
+
+    # Testing
+    previous_10_days = Train_df.tail(10)
+    final_df = pd.concat([previous_10_days, Test_df], ignore_index=True)
+    Data = scaler.fit_transform(final_df)
+
+    X_test = []
+    Y_test = []
+
+    for i in range(10, Data.shape[0]):
+        X_test.append(Data[i - 10:i])
+        Y_test.append(Data[i, 0])
+
+    X_test = np.array(X_test)
+    Y_test = np.array(Y_test)
+
+    y_pred = model.predict(X_test)
+    scaler = scaler.scale_
+
+    scale_factor = 1 / scaler[0]
+    y_pred = y_pred * scale_factor
+    Y_test = Y_test * scale_factor
+
+
+    # Signal
+    def crossover(ma10, ma20, ma2):
+        if ma10 > ma20 and ma20 > ma2:
+            return 'buy'
+        elif ma10 > ma20 or ma10 > ma2:
+            return 'hold'
+        else:
+            return 'sell'
+
+
+    ma10_recent = ma10.iloc[-1]
+    ma20_recent = ma20.iloc[-1]
+    ma200_recent = ma200.iloc[-1]
+    signal = crossover(ma10_recent, ma20_recent, ma200_recent)
+
+    # VIX
+    close_prices = data['Close'].values
+    log_returns = np.log(close_prices[1:] / close_prices[:-1])
+    volatility_index = np.sqrt(252) * np.std(log_returns)
+
+    threshold = 0.2
+
+    if volatility_index < threshold:
+        V_signal = 'buy'
+    elif volatility_index > threshold:
+        V_signal = 'sell'
+    else:
+        V_signal = 'hold'
+
+    bullish_price_index = (close_prices[-1] - close_prices[0]) / close_prices[0]
+
+    threshold_bullish = 0.03
+
+    if bullish_price_index > threshold_bullish:
+        b_signal = 'buy'
+    elif bullish_price_index < -threshold_bullish:
+        b_signal = 'sell'
+    else:
+        b_signal = 'hold'
+
+
+
+    # Bollinger Bands
+    close_prices = data['Close']
+    mean = close_prices.rolling(window=20).mean()
+    std = close_prices.rolling(window=20).std()
+
+    # Upper and lower Bollinger Bands
+    upper_band = mean + 2 * std
+    lower_band = mean - 2 * std
+
+    # Signal
+    last_close_price = close_prices[-1]
+    last_upper_band = upper_band[-1]
+    last_lower_band = lower_band[-1]
+
+    if last_close_price > last_upper_band:
+        bol_signal = 'sell'
+    elif last_close_price < last_lower_band:
+        bol_signal = 'buy'
+    else:
+        bol_signal = 'hold'
+
+
 
     st.subheader('Sentiment Analysis')
     st.write("Overall Sentiment Score: ", overall_score)
     st.write("Buy/Sell Indication: ", buy_sell_indication)
-
-
-
-
-
-
-
-
-
+    st.subheader('Technical Signal')
+    st.write('Ema :', signal)
+    st.write("Volatility Index(VIX):", V_signal)
+    st.write("Bullish Price Index(BPI):", b_signal)
+    st.write("Bollinger Bands:", bol_signal)
