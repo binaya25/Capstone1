@@ -50,7 +50,7 @@ The Stock Analyst App relies on public stock market data sources for historical 
 The predictions provided by the app are based on a machine learning model and should be used for informational purposes only.
 
 ## SwingStock
-https://binaya25-capstone1-swing-stockfolderswingstock-2f84fy.streamlit.app/
+https://binaya-capstone.streamlit.app/
 
 
 ## Contact Information
