@@ -82,7 +82,7 @@ with pricing_data:
         st.write(f"P/E Ratio: {pe_ratio:.2f}")
         st.write(f"Turnover: {turnover:.2f}%")
         st.write(f"Total Shares: {total_shares:.7f}B")
-        st.write(f"Dividend Yield: {dividend_yield:.2f}%")
+        # st.write(f"Dividend Yield: {dividend_yield:.2f}%")
         st.write(f"Volume: {volume:}M")
 
         for key, value in stock_info.items():
