@@ -6,5 +6,7 @@ yfinance==0.2.31
 DateTime==5.2
 plotly==5.3.1
 yahooquery
-keras==2.6.0
+keras==2.15.0
+yfinance
 tensorflow
+
