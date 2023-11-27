@@ -58,6 +58,7 @@ with pricing_data:
     if ticker:
         sdata = Ticker(ticker)
         stock_info = sdata.summary_detail
+        info = sdata.info
 
         # Retrieving specific information
         market_cap = stock_info[ticker]["marketCap"]/1e10
@@ -67,8 +68,12 @@ with pricing_data:
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]
         turnover = (average_volume / total_shares) * 100
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]/1e9
-        dividend_yield = stock_info[ticker]["dividendYield"] * 100
+        # dividend_yield = stock_info[ticker]["dividendYield"] * 100
         volume = stock_info[ticker]["volume"]/1e6
+
+        dividend_yield = info.get('dividendYield', 0)
+
+
 
 
         st.write(f"Market Cap: {market_cap:.2f}B")
