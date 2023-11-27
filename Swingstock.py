@@ -82,7 +82,7 @@ with pricing_data:
         for key, value in stock_info.items():
             print(f"{key}: {value}")
 
-print(stock_info)
+
 
 with fundamental_data:
     st.subheader('Financial Statements')
