@@ -68,7 +68,7 @@ with pricing_data:
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]
         turnover = (average_volume / total_shares) * 100
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]/1e9
-        dividend_yield = ticker.dividends * 100
+        # dividend_yield = stock_info[ticker]["dividendYield"] * 100
         volume = stock_info[ticker]["volume"]/1e6
 
 
