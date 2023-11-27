@@ -316,6 +316,8 @@ with indication:
     Train_df = pd.DataFrame(data['Close'][0:int(len(data) * 0.70)])
     Test_df = pd.DataFrame(data['Close'][int(len(data) * 0.70):int(len(data))])
 
+
+
     from sklearn.preprocessing import MinMaxScaler
 
     scaler = MinMaxScaler(feature_range=(0, 1))
