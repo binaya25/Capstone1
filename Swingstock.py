@@ -60,15 +60,15 @@ with pricing_data:
         stock_info = sdata.summary_detail
 
         # Retrieving specific information
-        market_cap = sdata.summary_detail[ticker]["marketCap"]/1e10
+        market_cap = stock_info[ticker]["marketCap"]/1e10
         eps = sdata.key_stats[ticker]["trailingEps"]
-        pe_ratio = sdata.summary_detail[ticker]["trailingPE"]
-        average_volume = sdata.summary_detail[ticker]["averageVolume10days"]
+        pe_ratio = stock_info[ticker]["trailingPE"]
+        average_volume = stock_info[ticker]["averageVolume10days"]
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]
         turnover = (average_volume / total_shares) * 100
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]/1e9
-        dividend_yield = sdata.summary_detail[ticker]["dividendYield"]*100
-        volume = sdata.summary_detail[ticker]["volume"]/1e6
+        dividend_yield = stock_info[ticker]["dividendYield"] * 100
+        volume = stock_info[ticker]["volume"]/1e6
 
 
         st.write(f"Market Cap: {market_cap:.2f}B")
@@ -82,7 +82,7 @@ with pricing_data:
         for key, value in stock_info.items():
             print(f"{key}: {value}")
 
-
+print(stock_info)
 
 with fundamental_data:
     st.subheader('Financial Statements')
