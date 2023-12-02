@@ -323,43 +323,43 @@ with indication:
     ma20 = data.Close.rolling(20).mean()
     ma200 = data.Close.rolling(200).mean()
 
-    Train_df = pd.DataFrame(data['Close'][0:int(len(data) * 0.70)])
-    Test_df = pd.DataFrame(data['Close'][int(len(data) * 0.70):int(len(data))])
+    # Train_df = pd.DataFrame(data['Close'][0:int(len(data) * 0.70)])
+    # Test_df = pd.DataFrame(data['Close'][int(len(data) * 0.70):int(len(data))])
 
 
 
-    from sklearn.preprocessing import MinMaxScaler
-
-    scaler = MinMaxScaler(feature_range=(0, 1))
-
-    Train_df_array = scaler.fit_transform(Train_df)
+    # from sklearn.preprocessing import MinMaxScaler
+    #
+    # scaler = MinMaxScaler(feature_range=(0, 1))
+    #
+    # Train_df_array = scaler.fit_transform(Train_df)
 
 
 
     # Load model
-    model = load_model('model_keras_stockapp1.h5')
-
-    # Testing
-    previous_10_days = Train_df.tail(10)
-    final_df = pd.concat([previous_10_days, Test_df], ignore_index=True)
-    Data = scaler.fit_transform(final_df)
-
-    X_test = []
-    Y_test = []
-
-    for i in range(10, Data.shape[0]):
-        X_test.append(Data[i - 10:i])
-        Y_test.append(Data[i, 0])
-
-    X_test = np.array(X_test)
-    Y_test = np.array(Y_test)
-
-    y_pred = model.predict(X_test)
-    scaler = scaler.scale_
-
-    scale_factor = 1 / scaler[0]
-    y_pred = y_pred * scale_factor
-    Y_test = Y_test * scale_factor
+    # model = load_model('model_keras_stockapp1.h5')
+    #
+    # # Testing
+    # previous_10_days = Train_df.tail(10)
+    # final_df = pd.concat([previous_10_days, Test_df], ignore_index=True)
+    # Data = scaler.fit_transform(final_df)
+    #
+    # X_test = []
+    # Y_test = []
+    #
+    # for i in range(10, Data.shape[0]):
+    #     X_test.append(Data[i - 10:i])
+    #     Y_test.append(Data[i, 0])
+    #
+    # X_test = np.array(X_test)
+    # Y_test = np.array(Y_test)
+    #
+    # y_pred = model.predict(X_test)
+    # scaler = scaler.scale_
+    #
+    # scale_factor = 1 / scaler[0]
+    # y_pred = y_pred * scale_factor
+    # Y_test = Y_test * scale_factor
 
 
     # Signal
