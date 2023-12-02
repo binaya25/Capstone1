@@ -9,4 +9,5 @@ yahooquery
 keras==2.15.0
 yfinance
 tensorflow
+scikit-learn==0.24.2
 
