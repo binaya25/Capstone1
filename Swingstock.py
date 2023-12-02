@@ -337,7 +337,7 @@ with indication:
 
 
     # Load model
-    model = load_model('model_keras_stockapp1.h5')
+    model = load_model('/Desktop/PYTHON PROJECTS  XCCELERATE/Capstone1/model_keras_stockapp1.h5')
 
     # Testing
     previous_10_days = Train_df.tail(10)
