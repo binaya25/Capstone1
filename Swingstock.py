@@ -15,9 +15,17 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 nltk.download('vader_lexicon')
 
 st.title('Swingstock')
+
+
 ticker = st.sidebar.text_input('Stock')
 start_date = st.sidebar.date_input('Start Date')
 end_date = st.sidebar.date_input('End Date')
+
+
+if ticker =='':
+    st.sidebar.write('Input Stock Name')
+
+
 
 # ticker = input("Please enter the stock's ticker symbol: ")
 # start_date = input("Please enter the start date (YYYY-MM-DD): ")
@@ -34,6 +42,7 @@ end_date = st.sidebar.date_input('End Date')
 data = yf.download(ticker, start=start_date, end=end_date)
 fig = px.line(data, x=data.index, y=data['Adj Close'], title=ticker)
 st.plotly_chart(fig)
+
 
 
 
@@ -308,6 +317,7 @@ with indication:
             st.write("Overall: Buy")
         else:
             st.write("Overall: Wait")
+
 
     ma10 = data.Close.rolling(10).mean()
     ma20 = data.Close.rolling(20).mean()
