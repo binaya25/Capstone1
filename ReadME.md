@@ -2,6 +2,9 @@
 
 This readme provides information about the Stock Analyst App, its functionality, installation instructions, and how to run the app.
 
+## Swingstock App test link (Incase it shows error, input correct date and fill up stock name)
+https://binaya-capstone.streamlit.app/  
+
 ## Introduction
 The Stock Analyst App is a Python application that analyzes historical stock data, generates data visualizations, and provides predictions based on a machine learning model.
 
@@ -50,7 +53,7 @@ The Stock Analyst App relies on public stock market data sources for historical 
 The predictions provided by the app are based on a machine learning model and should be used for informational purposes only.
 
 ## SwingStock
-https://binaya-capstone.streamlit.app/
+https://binaya-capstone.streamlit.app/  (Incase it shows error, input correct date and fill up stock name)
 
 
 ## Contact Information
