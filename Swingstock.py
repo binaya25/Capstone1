@@ -334,8 +334,10 @@ with indication:
 
     Train_df_array = scaler.fit_transform(Train_df)
 
+    model_path = './model_keras_stockapp1.h5'
+
     # Load model
-    model = load_model('model_keras_stockapp1.h5')
+    model = load_model(model_path)
 
     # Testing
     previous_10_days = Train_df.tail(10)
