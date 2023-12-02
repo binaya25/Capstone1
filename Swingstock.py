@@ -334,7 +334,7 @@ with indication:
 
     Train_df_array = scaler.fit_transform(Train_df)
 
-    model_path = './model_keras_stockapp1.h5'
+    model_path = '/Capstone1/model_keras_stockapp1.h5'
 
     # Load model
     model = load_model(model_path)
