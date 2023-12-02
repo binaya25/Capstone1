@@ -15,35 +15,17 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 nltk.download('vader_lexicon')
 
 st.title('Swingstock')
-
-
 ticker = st.sidebar.text_input('Stock')
 start_date = st.sidebar.date_input('Start Date')
 end_date = st.sidebar.date_input('End Date')
-
 
 if ticker =='':
     st.sidebar.write('Input Stock Name')
 
 
-
-# ticker = input("Please enter the stock's ticker symbol: ")
-# start_date = input("Please enter the start date (YYYY-MM-DD): ")
-# end_date = input("Please enter the end date (YYYY-MM-DD): ")
-#
-# if not ticker or not start_date or not end_date:
-#     print("Please input the stock's name and date.")
-# else:
-#     data = yf.download(ticker, start=start_date, end=end_date)
-
-
-
-
 data = yf.download(ticker, start=start_date, end=end_date)
 fig = px.line(data, x=data.index, y=data['Adj Close'], title=ticker)
 st.plotly_chart(fig)
-
-
 
 
 pricing_data, fundamental_data, technical_data, news, indication = st.tabs(["Pricing Data", "Fundamental_Data", "Technical_Data","Top News", "Indication(buy/sell/hold)"])
@@ -79,11 +61,6 @@ with pricing_data:
         total_shares = sdata.key_stats[ticker]["sharesOutstanding"]/1e9
         # dividend_yield = stock_info[ticker]["dividendYield"] * 100
         volume = stock_info[ticker]["volume"]/1e6
-
-
-
-
-
 
 
         st.write(f"Market Cap: {market_cap:.2f}B")
@@ -200,9 +177,6 @@ with technical_data:
     data = calculate_bollinger_bands(data)
 
     st.write(data[['Bearish Engulfing', 'Bullish Engulfing', 'RSI', 'RVI', 'Doji', 'Morning Star', 'Evening Star','Close', 'SMA', 'Upper Band', 'Lower Band']])
-
-
-
 
 
 
@@ -323,7 +297,7 @@ with indication:
     ma20 = data.Close.rolling(20).mean()
     ma200 = data.Close.rolling(200).mean()
 
-    
+
 
     # Signal
     def crossover(ma10, ma20, ma2):
