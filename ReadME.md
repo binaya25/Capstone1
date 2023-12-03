@@ -1,4 +1,4 @@
-# Stock Analyst App Readme
+# Stock Analyst App Readme  ## (Use PC or rotate mobile screen for better experience)
 
 This readme provides information about the Stock Analyst App, its functionality, installation instructions, and how to run the app.
 
